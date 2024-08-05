@@ -1,27 +1,21 @@
 import Link from "next/link"
 import React, { FC } from "react"
 import { cn } from "../lib/utils"
+import { categories } from "../constants"
 
 interface Props {
   className?: string
 }
 
-const categories = [
-  "Пиццы",
-  "Комбо",
-  "Закуски",
-  "Коктейли",
-  "Кофе",
-  "Напитки",
-  "Десерты",
-  "Десерты",
-]
 const activeIndex = 0
 
 export const Categories: FC<Props> = ({ className }) => {
   return (
     <div
-      className={cn("inline-flex gap-1 rounded-2xl bg-gray-50/95 p-1", className)}
+      className={cn(
+        "inline-flex gap-1 rounded-2xl bg-gray-50/95 p-1",
+        className,
+      )}
     >
       {categories.map((name, i) => (
         <Link

@@ -1,4 +1,12 @@
-import { Container, Title, TopBar } from "@/shared/components"
+import {
+  Container,
+  Filters,
+  ProductCard,
+  ProductsGroupList,
+  Title,
+  TopBar,
+} from "@/shared/components"
+import { RangeSlider } from "@/shared/components/RangeSlider"
 
 export default function Home() {
   return (
@@ -8,9 +16,28 @@ export default function Home() {
       </Container>
       <TopBar />
 
-      <div className="flex h-[2000px] items-center justify-center">
-        <div className="size-20 bg-red-700"></div>
-      </div>
+      <Container className="pb-14">
+        <div className="flex gap-[60px]">
+          <div className="w-[250px]">
+            <Filters />
+          </div>
+
+          <div className="flex-1">
+            <div className="flex flex-col gap-16">
+              <ProductsGroupList
+                title="Пиццы"
+                items={[1, 2, 3, 4, 5]}
+                categoryId={1}
+              />
+              <ProductsGroupList
+                title="Роллы"
+                items={[1, 2, 3, 4, 5]}
+                categoryId={2}
+              />
+            </div>
+          </div>
+        </div>
+      </Container>
     </>
   )
 }
