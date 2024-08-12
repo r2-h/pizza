@@ -6,10 +6,16 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Плавный скролл */
 @media screen and (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
+}
+
+
+.scroll-offset {
+  scroll-margin-top: 100px;
 }
 
 @layer base {

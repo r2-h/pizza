@@ -3,6 +3,8 @@ import React, { FC, useEffect, useRef } from "react"
 import { Title } from "./Title"
 import { ProductCard } from "./ProductCard"
 import { useIntersection } from "react-use"
+import { useCategory } from "@/store/useCategory"
+import { cn } from "../lib/utils"
 
 interface Props {
   title: string
@@ -23,15 +25,23 @@ export const ProductsGroupList: FC<Props> = ({
   const intersection = useIntersection(intersectionRef, {
     threshold: 0.4,
   })
+  const setActiveId = useCategory((state) => state.setActiveId)
 
   useEffect(() => {
     if (intersection?.isIntersecting) {
       console.log(title, categoryId)
+      if (categoryId) {
+        setActiveId(categoryId)
+      }
     }
   }, [categoryId, intersection?.isIntersecting, title])
 
   return (
-    <div className={className} ref={intersectionRef} id={title}>
+    <div
+      className={cn("scroll-offset", className)}
+      ref={intersectionRef}
+      id={title}
+    >
       <Title text={title} size="lg" className="mb-5 font-extrabold" />
       <div className="grid grid-cols-3 gap-[50px]">
         {items.map((item, i) => (

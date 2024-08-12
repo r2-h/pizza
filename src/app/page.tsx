@@ -1,14 +1,22 @@
 import {
   Container,
   Filters,
-  ProductCard,
   ProductsGroupList,
   Title,
   TopBar,
 } from "@/shared/components"
-import { RangeSlider } from "@/shared/components/RangeSlider"
 
-export default function Home() {
+// async function getData() {
+//   const data = await prisma.user.findMany()
+
+//   return data
+// }
+
+export default async function Home() {
+  // const response = await fetch("/api/users")
+  // const user = await response.json()
+  // console.log(user)
+
   return (
     <>
       <Container>
@@ -30,7 +38,7 @@ export default function Home() {
                 categoryId={1}
               />
               <ProductsGroupList
-                title="Роллы"
+                title="Комбо"
                 items={[1, 2, 3, 4, 5]}
                 categoryId={2}
               />
