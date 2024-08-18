@@ -6,16 +6,10 @@ import {
   TopBar,
 } from "@/shared/components"
 
-// async function getData() {
-//   const data = await prisma.user.findMany()
-
-//   return data
-// }
-
 export default async function Home() {
-  // const response = await fetch("/api/users")
-  // const user = await response.json()
-  // console.log(user)
+  const response = await fetch(`http://localhost:3000/api/users`)
+  const data = await response.json()
+  console.log(data)
 
   return (
     <>
@@ -39,7 +33,7 @@ export default async function Home() {
               />
               <ProductsGroupList
                 title="Комбо"
-                items={[1, 2, 3, 4, 5]}
+                items={[6, 7, 8, 9, 10]}
                 categoryId={2}
               />
             </div>

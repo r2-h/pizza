@@ -1,10 +1,10 @@
 "use client"
-import React, { FC, useEffect, useRef } from "react"
-import { Title } from "./Title"
-import { ProductCard } from "./ProductCard"
-import { useIntersection } from "react-use"
 import { useCategory } from "@/store/useCategory"
+import { FC, useEffect, useRef } from "react"
+import { useIntersection } from "react-use"
 import { cn } from "../lib/utils"
+import { ProductCard } from "./ProductCard"
+import { Title } from "./Title"
 
 interface Props {
   title: string
@@ -29,7 +29,6 @@ export const ProductsGroupList: FC<Props> = ({
 
   useEffect(() => {
     if (intersection?.isIntersecting) {
-      console.log(title, categoryId)
       if (categoryId) {
         setActiveId(categoryId)
       }
@@ -46,7 +45,7 @@ export const ProductsGroupList: FC<Props> = ({
       <div className="grid grid-cols-3 gap-[50px]">
         {items.map((item, i) => (
           <ProductCard
-            key={item.id}
+            key={item}
             name="Маргарита"
             imageUrl="https://media.dodostatic.net/image/r:292x292/11EE7D610BBEB562BD4D48786AD87270.webp"
             price={390}

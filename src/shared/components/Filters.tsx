@@ -1,24 +1,40 @@
-import { FC } from "react"
-import { Title } from "./Title"
-import { FilterCheckbox } from "./FilterCheckbox"
+"use client"
+import { useFilterIngredients } from "@/hooks/useFilterIngredients"
+import { ChangeEvent, FC, useState } from "react"
 import { Input } from "../ui/input"
-import { RangeSlider } from "./RangeSlider"
 import { CheckboxFiltersGroup } from "./CheckboxFiltersGroup"
-import { checkboxDefaultItems, checkboxItems } from "../constants"
+import { RangeSlider } from "./RangeSlider"
+import { Title } from "./Title"
 
+export type Price = {
+  priceFrom: number
+  priceTo: number
+}
 interface Props {
   className?: string
 }
 
 export const Filters: FC<Props> = ({ className }) => {
+  const maxPrice = 5000
+  const { ingredients, loadingIngredients, selectedIds, selectIdHandler } =
+    useFilterIngredients()
+  const [{ priceFrom, priceTo }, setPrice] = useState<Price>({
+    priceFrom: 0,
+    priceTo: 4000,
+  })
+
+  const priceHandler = (key: keyof Price, e: ChangeEvent<HTMLInputElement>) => {
+    const value = Number(e.currentTarget.value)
+    setPrice((prev) => ({ ...prev, [key]: value }))
+  }
   return (
     <div className={className}>
       <Title text="Фильтрация" size="sm" className="mb-5 font-bold" />
       <div className="flex flex-col gap-4">
         <CheckboxFiltersGroup
           items={[
-            { text: "Можно собирать", value: "1" },
-            { text: "Новинки", value: "2" },
+            { name: "Можно собирать", id: "111" },
+            { name: "Новинки", id: "222" },
           ]}
           title={"CheckboxFiltersGroup"}
         />
@@ -31,25 +47,36 @@ export const Filters: FC<Props> = ({ className }) => {
             type="number"
             placeholder="0"
             min={0}
-            max={1000}
-            defaultValue={0}
+            max={maxPrice}
+            value={priceFrom}
+            onChange={(e) => priceHandler("priceFrom", e)}
           />
           <Input
             type="number"
             placeholder="1000"
             min={100}
-            max={1000}
-            defaultValue={0}
+            max={maxPrice}
+            value={priceTo}
+            onChange={(e) => priceHandler("priceTo", e)}
           />
         </div>
-        <RangeSlider max={5000} min={0} step={1} value={[1000, 4000]} />
+        <RangeSlider
+          max={maxPrice}
+          min={0}
+          step={1}
+          value={[priceFrom, priceTo]}
+          onValueChange={setPrice}
+        />
       </div>
       <CheckboxFiltersGroup
         title="Ингридиенты"
         className="mt-5"
         limit={6}
-        items={checkboxItems}
-        defaultItems={checkboxDefaultItems}
+        items={ingredients}
+        defaultItems={ingredients.slice(0, 6)}
+        loading={loadingIngredients}
+        selectedIds={selectedIds}
+        selectIdHandler={selectIdHandler}
       />
     </div>
   )

@@ -7,6 +7,7 @@ import React, { FC } from "react"
 import { Container } from "./Container"
 import { ArrowRight, ShoppingCart, User } from "lucide-react"
 import { Button } from "../ui/button"
+import { SearchInput } from "./SearchInput"
 
 interface Props {
   hasSearch?: boolean
@@ -29,6 +30,8 @@ export const Header: FC<Props> = ({ className }) => {
             </div>
           </div>
         </Link>
+
+        <SearchInput />
 
         <div className="flex items-center gap-3">
           <Button variant="outline">

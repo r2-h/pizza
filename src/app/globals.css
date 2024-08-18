@@ -13,7 +13,6 @@ html {
   }
 }
 
-
 .scroll-offset {
   scroll-margin-top: 100px;
 }
@@ -34,7 +33,7 @@ html {
     --secondary: 32 100% 98%;
     --secondary-foreground: 24 9.8% 10%;
 
-    --muted: 60 4.8% 95.9%;
+    --muted: 60 4.8% 94%;
     --muted-foreground: 25 5.3% 44.7%;
 
     --accent: 60 4.8% 95.9%;

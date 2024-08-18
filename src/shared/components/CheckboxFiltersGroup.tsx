@@ -1,9 +1,10 @@
 "use client"
-import React, { ChangeEvent, FC, useState } from "react"
+import { ChangeEvent, FC, useState } from "react"
 import { Input } from "../ui/input"
-import { FilterChecboxProps, FilterCheckbox } from "./FilterCheckbox"
+import { Skeleton } from "../ui/skeleton"
+import { FilterCheckbox, FilterCheckboxProps } from "./FilterCheckbox"
 
-type Item = FilterChecboxProps
+type Item = FilterCheckboxProps
 
 interface Props {
   title: string
@@ -12,8 +13,9 @@ interface Props {
   limit?: number
   searchInputPlaceholder?: string
   className?: string
-  onChange?: (values: string[]) => void
-  defaultValue?: string[]
+  loading?: boolean
+  selectedIds?: string[]
+  selectIdHandler?: (selectedId: string) => void
 }
 
 export const CheckboxFiltersGroup: FC<Props> = ({
@@ -23,8 +25,9 @@ export const CheckboxFiltersGroup: FC<Props> = ({
   limit = 5,
   searchInputPlaceholder = "Поиск...",
   className,
-  onChange,
-  defaultValue,
+  loading,
+  selectedIds,
+  selectIdHandler,
 }) => {
   const [showAll, setShowAll] = useState(false)
   const [searchValue, setSearchValue] = useState("")
@@ -35,9 +38,23 @@ export const CheckboxFiltersGroup: FC<Props> = ({
 
   const list = searchValue
     ? items.filter((item) =>
-        item.text.toLowerCase().includes(searchValue.toLocaleLowerCase()),
+        item.name.toLowerCase().includes(searchValue.toLocaleLowerCase()),
       )
     : items
+
+  if (loading) {
+    return (
+      <div className={className}>
+        <p className="mb-3 font-bold">{title}</p>
+        {Array(limit)
+          .fill(null)
+          .map((_, i) => (
+            <Skeleton key={i} className="mb-5 h-6 rounded-md" />
+          ))}
+        <Skeleton className="mb-5 h-6 w-28 rounded-md" />
+      </div>
+    )
+  }
 
   return (
     <div className={className}>
@@ -57,10 +74,12 @@ export const CheckboxFiltersGroup: FC<Props> = ({
       <div className="scrollbar flex max-h-96 flex-col gap-4 overflow-auto pr-2">
         {(showAll ? list : defaultItems || list).map((item) => (
           <FilterCheckbox
-            key={String(item.value)}
-            value={item.value}
-            text={item.text}
+            key={item.id}
+            id={item.id}
+            name={item.name}
             endAdornment={item.endAdornment}
+            checked={selectedIds?.includes(item.id)}
+            onCheckedChange={() => selectIdHandler?.(item.id)}
           />
         ))}
       </div>
