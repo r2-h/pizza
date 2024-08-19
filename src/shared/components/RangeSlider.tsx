@@ -1,5 +1,4 @@
 "use client"
-
 import React, { Fragment, RefObject, useEffect, useState } from "react"
 import * as SliderPrimitive from "@radix-ui/react-slider"
 import { cn } from "../lib/utils"
@@ -12,7 +11,7 @@ type SliderProps = {
   step: number
   formatLabel?: (value: number) => string
   value?: number[] | readonly number[]
-  onValueChange?: (values: Price) => void
+  onValueChange?: (value: number[]) => void
 }
 
 const RangeSlider = React.forwardRef(
@@ -40,7 +39,7 @@ const RangeSlider = React.forwardRef(
     const handleValueChange = (newValues: number[]) => {
       setLocalValues(newValues)
       if (onValueChange) {
-        onValueChange({ priceFrom: newValues[0], priceTo: newValues[1] })
+        onValueChange(newValues)
       }
     }
 

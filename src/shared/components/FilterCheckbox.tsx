@@ -21,7 +21,6 @@ export const FilterCheckbox: FC<FilterCheckboxProps> = ({
       <Checkbox
         onCheckedChange={onCheckedChange}
         checked={checked}
-        value={id}
         className="h-6 w-6 rounded-[8px]"
         id={id}
       />

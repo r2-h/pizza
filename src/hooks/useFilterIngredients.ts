@@ -2,10 +2,11 @@ import { Ingredient } from "@prisma/client"
 import { useEffect, useState } from "react"
 import { ApiClient } from "../../services/api-client"
 
-export const useFilterIngredients = () => {
+export const useFilterIngredients = (initialIngredients: string[]) => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([])
   const [loadingIngredients, setLoadingIngredients] = useState(false)
-  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [selectedIngredientIds, setSelectedIngredientIds] =
+    useState<string[]>(initialIngredients)
 
   useEffect(() => {
     setLoadingIngredients(true)
@@ -17,10 +18,10 @@ export const useFilterIngredients = () => {
   }, [])
 
   const selectIdHandler = (itemId: string) => {
-    setSelectedIds((prev) =>
+    setSelectedIngredientIds((prev) =>
       prev.includes(itemId)
-        ? selectedIds.filter((id) => id !== itemId)
-        : [...selectedIds, itemId],
+        ? selectedIngredientIds.filter((id) => id !== itemId)
+        : [...selectedIngredientIds, itemId],
     )
   }
 
@@ -30,7 +31,7 @@ export const useFilterIngredients = () => {
       id: String(ingredient.id),
     })),
     loadingIngredients,
-    selectedIds,
+    selectedIngredientIds,
     selectIdHandler,
   }
 }

@@ -18,7 +18,7 @@ export default async function Home() {
       </Container>
       <TopBar />
 
-      <Container className="pb-14">
+      <Container className="pb-14 pt-5">
         <div className="flex gap-[60px]">
           <div className="w-[250px]">
             <Filters />
