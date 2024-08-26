@@ -1,89 +1,39 @@
 "use client"
-import { useFilterIngredients } from "@/hooks/useFilterIngredients"
-import { useSet } from "react-use"
-import { ChangeEvent, FC, useEffect, useState } from "react"
+import { useFilters } from "@/hooks/use-filters"
+import { useIngredients } from "@/hooks/use-ingredients"
+import { useRouter } from "next/navigation"
+import qs from "qs"
+import { FC, useEffect } from "react"
 import { Input } from "../ui/input"
 import { CheckboxFiltersGroup } from "./CheckboxFiltersGroup"
 import { RangeSlider } from "./RangeSlider"
 import { Title } from "./Title"
-import qs from "qs"
-import { useRouter, useSearchParams } from "next/navigation"
 
-export type Price = {
-  priceFrom?: number
-  priceTo?: number
-}
-type QueryFilters = {
-  dough: string
-  ingredients: string
-  sizes: string
-} & Price
 interface Props {
   className?: string
 }
 
 export const Filters: FC<Props> = ({ className }) => {
-  const searchParams = useSearchParams() as unknown as Map<
-    keyof QueryFilters,
-    string
-  >
-  const initialDoughIds = searchParams.get("dough")?.split(",") || []
-  const initialSizeIds = searchParams.get("sizes")?.split(",") || []
-  const initialPriceFromId = Number(searchParams.get("priceFrom")) || undefined
-  const initialPriceToId = Number(searchParams.get("priceTo")) || undefined
-  const initialIngredients = searchParams.get("ingredients")?.split(",") || []
   const router = useRouter()
   const maxPrice = 1500
-
-  console.log(initialIngredients)
-
-  const {
-    ingredients,
-    loadingIngredients,
-    selectedIngredientIds,
-    selectIdHandler,
-  } = useFilterIngredients(initialIngredients)
-
-  const [selectedDoughIds, setSelectedDoughIds] =
-    useState<string[]>(initialDoughIds)
-  const selectDoughHandler = (itemId: string) => {
-    setSelectedDoughIds((prev) =>
-      prev.includes(itemId)
-        ? selectedDoughIds.filter((id) => id !== itemId)
-        : [...selectedDoughIds, itemId],
-    )
-  }
-
-  const [selectedSizeIds, { toggle: toggleSizeIds }] = useSet(
-    new Set<string>(initialSizeIds),
-  )
-
-  const [prices, setPrices] = useState<Price>({
-    priceFrom: initialPriceFromId,
-    priceTo: initialPriceToId,
-  })
-
-  const priceHandler = (key: keyof Price, e: ChangeEvent<HTMLInputElement>) => {
-    const value = Number(e.currentTarget.value)
-    setPrices((prev) => ({ ...prev, [key]: value }))
-  }
+  const { ingredients, loadingIngredients } = useIngredients()
+  const filters = useFilters()
 
   useEffect(() => {
-    const filters = {
-      ...prices,
-      dough: selectedDoughIds,
-      ingredients: selectedIngredientIds,
-      sizes: Array.from(selectedSizeIds),
+    const queryFilters = {
+      ...filters.prices,
+      dough: filters.selectedDoughIds,
+      ingredients: filters.selectedIngredientIds,
+      sizes: Array.from(filters.selectedSizeIds),
     }
-    const queryString = qs.stringify(filters, { arrayFormat: "comma" })
+    const queryString = qs.stringify(queryFilters, { arrayFormat: "comma" })
     router.push(`/?${queryString}`, { scroll: false })
   }, [
-    prices?.priceFrom,
-    prices?.priceTo,
-    selectedDoughIds,
-    selectedIngredientIds,
-    selectedSizeIds,
-    router,
+    filters.prices?.priceFrom,
+    filters.prices?.priceTo,
+    filters.selectedDoughIds,
+    filters.selectedIngredientIds,
+    filters.selectedSizeIds,
   ])
 
   return (
@@ -95,8 +45,8 @@ export const Filters: FC<Props> = ({ className }) => {
           { name: "тонкое", id: "тонкое" },
           { name: "толстое", id: "толстое" },
         ]}
-        selectedIds={selectedDoughIds}
-        selectIdHandler={selectDoughHandler}
+        selectedIds={filters.selectedDoughIds}
+        selectIdHandler={filters.selectDoughIdsHandler}
       />
       <CheckboxFiltersGroup
         className="mt-5"
@@ -106,8 +56,8 @@ export const Filters: FC<Props> = ({ className }) => {
           { name: "30 см", id: "30" },
           { name: "40 см", id: "40" },
         ]}
-        selectedIds={Array.from(selectedSizeIds)}
-        selectIdHandler={toggleSizeIds}
+        selectedIds={Array.from(filters.selectedSizeIds)}
+        selectIdHandler={filters.setSelectedSizeIds}
       />
       <div className="mt-5 border-y border-y-neutral-100 py-6 pb-7">
         <p className="mb-3 font-bold">Цена от и до:</p>
@@ -117,25 +67,28 @@ export const Filters: FC<Props> = ({ className }) => {
             placeholder="0"
             min={0}
             max={maxPrice}
-            value={prices?.priceFrom}
-            onChange={(e) => priceHandler("priceFrom", e)}
+            value={filters.prices?.priceFrom}
+            onChange={(e) => filters.pricesHandler("priceFrom", e)}
           />
           <Input
             type="number"
             placeholder="1000"
             min={100}
             max={maxPrice}
-            value={prices?.priceTo}
-            onChange={(e) => priceHandler("priceTo", e)}
+            value={filters.prices?.priceTo}
+            onChange={(e) => filters.pricesHandler("priceTo", e)}
           />
         </div>
         <RangeSlider
           max={maxPrice}
           min={0}
           step={10}
-          value={[prices?.priceFrom || 0, prices?.priceTo || 1000]}
+          value={[
+            filters.prices?.priceFrom || 0,
+            filters.prices?.priceTo || 1000,
+          ]}
           onValueChange={([min, max]) =>
-            setPrices({ priceFrom: min, priceTo: max })
+            filters.setPrices({ priceFrom: min, priceTo: max })
           }
         />
       </div>
@@ -146,8 +99,8 @@ export const Filters: FC<Props> = ({ className }) => {
         items={ingredients}
         defaultItems={ingredients.slice(0, 6)}
         loading={loadingIngredients}
-        selectedIds={selectedIngredientIds}
-        selectIdHandler={selectIdHandler}
+        selectedIds={filters.selectedIngredientIds}
+        selectIdHandler={filters.selectIngredientIdsHandler}
       />
     </div>
   )

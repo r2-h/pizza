@@ -1,15 +1,17 @@
 "use client"
-import Link from "next/link"
-import React, { FC } from "react"
-import { cn } from "../lib/utils"
-import { categories } from "../constants"
 import { useCategory } from "@/store/useCategory"
+import Link from "next/link"
+import { FC } from "react"
+
+import { cn } from "../lib/utils"
+import { Category } from "@prisma/client"
 
 interface Props {
   className?: string
+  categories: Category[]
 }
 
-export const Categories: FC<Props> = ({ className }) => {
+export const Categories: FC<Props> = ({ className, categories }) => {
   const activeId = useCategory((state) => state.activeId)
 
   return (

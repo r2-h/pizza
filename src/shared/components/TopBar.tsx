@@ -3,12 +3,17 @@ import { Categories } from "./Categories"
 import { SortPopup } from "./SortPopup"
 import { cn } from "../lib/utils"
 import { Container } from "./Container"
+import prisma from "../../../prisma/db"
+import { Category } from "@prisma/client"
 
 interface Props {
   className?: string
+  categories: Category[]
 }
 
-export const TopBar: FC<Props> = ({ className }) => {
+export const TopBar: FC<Props> = async ({ className }) => {
+  const categories = await prisma.category.findMany({})
+
   return (
     <div
       className={cn(
@@ -16,8 +21,8 @@ export const TopBar: FC<Props> = ({ className }) => {
         className,
       )}
     >
-      <Container>
-        <Categories />
+      <Container className="flex items-center justify-between">
+        <Categories categories={categories} />
         <SortPopup />
       </Container>
     </div>

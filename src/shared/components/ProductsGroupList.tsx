@@ -1,5 +1,6 @@
 "use client"
 import { useCategory } from "@/store/useCategory"
+import { Product } from "@prisma/client"
 import { FC, useEffect, useRef } from "react"
 import { useIntersection } from "react-use"
 import { cn } from "../lib/utils"
@@ -8,7 +9,7 @@ import { Title } from "./Title"
 
 interface Props {
   title: string
-  items: any[]
+  items: Product[]
   className?: string
   listClassName?: string
   categoryId?: number
@@ -45,11 +46,12 @@ export const ProductsGroupList: FC<Props> = ({
       <div className="grid grid-cols-3 gap-[50px]">
         {items.map((item, i) => (
           <ProductCard
-            key={item}
-            name="Маргарита"
-            imageUrl="https://media.dodostatic.net/image/r:292x292/11EE7D610BBEB562BD4D48786AD87270.webp"
+            key={item.id}
+            name={item.name}
+            imageUrl={item.imageUrl}
             price={390}
             count={i % 2}
+            productId={item.id}
           />
         ))}
       </div>

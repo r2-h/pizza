@@ -12,6 +12,7 @@ interface Props {
   count?: number
   imageUrl?: string
   className?: string
+  productId?: string
 }
 
 export const ProductCard: FC<Props> = ({
@@ -20,17 +21,18 @@ export const ProductCard: FC<Props> = ({
   count,
   imageUrl,
   className,
+  productId,
 }) => {
   return (
     <div className={cn(className)}>
-      <Link href="">
-        <div className="flex h-[260px] justify-center rounded-lg bg-secondary p-6">
+      <Link href={`/product/${productId}`}>
+        <div className="flex max-h-[16rem] justify-center rounded-lg bg-secondary p-0 md:p-6">
           <Image
             src={imageUrl || ""}
             alt="Logo"
             width={215}
             height={215}
-            className="object-contain"
+            className="min-h-[4rem] min-w-[4rem] object-contain"
           />
         </div>
         <Title text={name} size="sm" className="mb-1 mt-3 font-bold" />
@@ -40,7 +42,7 @@ export const ProductCard: FC<Props> = ({
         </p>
 
         <div className="mt-4 flex items-center justify-between">
-          <span className="text-[20px]">
+          <span className="text-[1.25rem]">
             от <b>{price} ₽</b>
           </span>
 
