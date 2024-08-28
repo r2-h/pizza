@@ -5,7 +5,7 @@ import {
   Title,
 } from "@/shared/components"
 import { notFound } from "next/navigation"
-import prisma from "../../../../prisma/db"
+import prisma from "../../../../../prisma/db"
 
 const getProduct = async (id: number) => {
   const data = await prisma.product.findUnique({

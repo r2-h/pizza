@@ -5,7 +5,7 @@ import {
   Title,
   TopBar,
 } from "@/shared/components"
-import prisma from "../../prisma/db"
+import prisma from "../../../prisma/db"
 
 export default async function Home() {
   const response = await fetch(`http://localhost:3000/api/users`)

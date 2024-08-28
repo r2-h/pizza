@@ -1,11 +1,11 @@
 import { cn } from "@/shared/lib/utils"
 import Image from "next/image"
-import React, { FC } from "react"
+import { PizzaSizes } from "../types"
 
 interface Props {
   className?: string
   src: string
-  size: 20 | 30 | 40
+  size: PizzaSizes
 }
 
 export const PizzaImage = ({ src, size, className }: Props) => {
