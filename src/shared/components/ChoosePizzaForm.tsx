@@ -1,10 +1,10 @@
 "use client"
 import { Ingredient, ProductItem } from "@prisma/client"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { mapPizzaType, pizzaSizes, pizzaTypes } from "../constants/pizza"
 import { cn } from "../lib/utils"
 import { Button } from "../ui/button"
-import { GroupVariants } from "./GroupVariants"
+import { GroupVariants, Variant } from "./GroupVariants"
 import { PizzaImage } from "./PizzaImage"
 import { Title } from "./Title"
 import { PizzaSizes } from "../types"
@@ -26,8 +26,8 @@ export const ChoosePizzaForm = ({
   productItems,
   ingredients,
 }: Props) => {
-  const [size, setSize] = useState<PizzaSizes>(30)
-  const [pizzaType, setPizzaType] = useState(1)
+  const [size, setSize] = useState<PizzaSizes>(20)
+  const [pizzaType, setPizzaType] = useState(2)
   const [activeIngredients, setActiveIngredients] = useState<number[]>([])
 
   const activeIngredientsHandler = (id: number) => {
@@ -42,10 +42,29 @@ export const ChoosePizzaForm = ({
   const ingredientsSum = ingredients
     .filter((el) => activeIngredients.includes(el.id))
     .reduce((acc, curr) => acc + curr.price, 0)
-  const productItem = productItems?.find(
+
+  const productItemPrice = productItems?.find(
     (item) => item.pizzaType === pizzaType && item.size === size,
+  )?.price
+
+  const totalPrice = productItemPrice ? productItemPrice + ingredientsSum : 0
+
+  const productItemsFilteredByType = productItems?.filter(
+    (item) => item.pizzaType === pizzaType,
   )
-  const totalPrice = productItem ? productItem.price + ingredientsSum : 0
+
+  const pizzas = pizzaSizes.map((item) => ({
+    name: item.name,
+    value: item.value,
+    disabled: !productItemsFilteredByType?.some((el) => el.size === item.value),
+  }))
+
+  useEffect(() => {
+    const firstNotDisabledItem = pizzas.find((item) => !item.disabled)
+    if (firstNotDisabledItem) {
+      setSize(firstNotDisabledItem.value as PizzaSizes)
+    }
+  }, [pizzaType])
 
   return (
     <div className={cn("flex flex-1 flex-col md:flex-row", className)}>
@@ -57,7 +76,7 @@ export const ChoosePizzaForm = ({
         </p>
         <div className="mt-5 flex flex-col gap-4">
           <GroupVariants
-            items={pizzaSizes}
+            items={pizzas}
             onClick={(value) => setSize(value as PizzaSizes)}
             value={size}
           />
@@ -79,11 +98,7 @@ export const ChoosePizzaForm = ({
             ))}
           </div>
         </div>
-
-        <Button
-          className="mt-10 h-[55px] w-full rounded-[18px] px-10 text-base"
-          disabled={!totalPrice}
-        >
+        <Button className="mt-10 h-[55px] w-full rounded-[18px] px-10 text-base">
           Добавить в корзину за {totalPrice} р.
         </Button>
       </div>
