@@ -2,7 +2,7 @@ import { Ingredient } from "@prisma/client"
 import { mapPizzaType, PizzaSize, PizzaType } from "../constants/pizza"
 
 export const getCartItemDetails = (
-  ingredients: Ingredient[],
+  ingredients: Pick<Ingredient, "name" | "price">[],
   pizzaType?: PizzaType,
   pizzaSize?: PizzaSize,
 ): string => {

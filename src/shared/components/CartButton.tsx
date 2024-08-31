@@ -2,9 +2,7 @@ import { ArrowRight, ShoppingCart } from "lucide-react"
 import { Button } from "../ui/button"
 import { CartDrawer } from "./CartDrawer"
 
-type Props = {}
-
-export const CartButton = ({}: Props) => {
+export const CartButton = () => {
   return (
     <CartDrawer>
       <Button className="group relative">
