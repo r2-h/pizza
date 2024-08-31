@@ -1,12 +1,13 @@
 "use client"
 
 import { cn } from "@/shared/lib/utils"
+import { User } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import React, { FC } from "react"
-import { Container } from "./Container"
-import { ArrowRight, ShoppingCart, User } from "lucide-react"
+import { FC } from "react"
+import { CartButton } from "."
 import { Button } from "../ui/button"
+import { Container } from "./Container"
 import { SearchInput } from "./SearchInput"
 
 interface Props {
@@ -38,16 +39,7 @@ export const Header: FC<Props> = ({ className }) => {
             <User size={16} />
             Войти
           </Button>
-
-          <Button className="group relative">
-            <b>520 ₽</b>
-            <span className="mx-3 h-full w-[1px] bg-white/30" />
-            <div className="flex items-center gap-1 transition duration-300 group-hover:opacity-0">
-              <ShoppingCart className="relative h-4 w-4" strokeWidth={2} />
-              <b>3</b>
-            </div>
-            <ArrowRight className="absolute right-5 w-5 -translate-x-2 opacity-0 transition duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
-          </Button>
+          <CartButton />
         </div>
       </Container>
     </header>
