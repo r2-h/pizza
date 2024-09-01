@@ -18,7 +18,12 @@ import { useCart } from "@/store/useCart"
 import { PizzaSize, PizzaType } from "../constants/pizza"
 
 export const CartDrawer: FC<PropsWithChildren> = ({ children }) => {
-  const { items, totalAmount, fetchCartItems } = useCart()
+  const { items, totalAmount, fetchCartItems, updateItemQuantity } = useCart()
+
+  const countButtonHandler = (type: string, id: number, quantity: number) => {
+    const newQuantity = type === "plus" ? quantity + 1 : quantity - 1
+    updateItemQuantity(id, newQuantity)
+  }
 
   useEffect(() => {
     fetchCartItems()
@@ -54,9 +59,9 @@ export const CartDrawer: FC<PropsWithChildren> = ({ children }) => {
                 quantity={item.quantity}
                 disabled={item.disabled}
                 price={item.price}
-                onClickCountButton={(type) => {
-                  fetchCartItems()
-                }}
+                onClickCountButton={(type) =>
+                  countButtonHandler(type, item.id, item.quantity)
+                }
                 onClickRemove={() => {
                   fetchCartItems()
                 }}

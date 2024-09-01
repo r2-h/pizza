@@ -35,6 +35,18 @@ export const useCart = create<CartState>((set, get) => ({
       set({ loading: true, error: false })
       const data = await ApiClient.cart.getCart()
 
+      set(getCartDetails(data)) 
+    } catch (error) {
+      console.error(error)
+      set({ error: true })
+    } finally {
+      set({ loading: false })
+    }
+  },
+  updateItemQuantity: async (cartId: number, quantity: number) => {
+    try {
+      set({ loading: true, error: false })
+      const data = await ApiClient.cart.updateCartItem(cartId, quantity)
       set(getCartDetails(data))
     } catch (error) {
       console.error(error)
@@ -43,7 +55,6 @@ export const useCart = create<CartState>((set, get) => ({
       set({ loading: false })
     }
   },
-  updateItemQuantity: async () => {},
   addCartItem: async () => {},
   removeCartItem: async () => {},
 }))
